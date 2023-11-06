@@ -1,6 +1,10 @@
 version: "3.8"
 
 services:
+  order-service:
+    image: order-service:spring-service
+    ports:
+      - '8081:8081'
   oracle-database:
     image: container-registry.oracle.com/database/enterprise
     container_name: oracle-database
@@ -39,9 +43,9 @@ services:
       - zookeeper
     restart: on-failure
     environment:
-      KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_HOST_NAME: 172.18.0.1
+      KAFKA_ZOOKEEPER_CONNECT: 172.18.0.1:2181
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'false'
       ALLOW_PLAINTEXT_LISTENER: yes
-      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://127.0.0.1:9092
+      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://172.18.0.1:9092
       KAFKA_CFG_LISTENERS: PLAINTEXT://:9092
