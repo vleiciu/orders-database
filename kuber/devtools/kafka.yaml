@@ -21,15 +21,15 @@ spec:
             - containerPort: 9092
           env:
             - name: KAFKA_ADVERTISED_HOST_NAME
-              value: 10.152.183.216
+              value: 10.152.183.25
             - name: KAFKA_ZOOKEEPER_CONNECT
-              value: 10.152.183.216:2181
+              value: 10.152.183.25:2181
             - name: KAFKA_AUTO_CREATE_TOPICS_ENABLE
               value: 'false'
             - name: ALLOW_PLAINTEXT_LISTENER
               value: 'yes'
             - name: KAFKA_CFG_ADVERTISED_LISTENERS
-              value: PLAINTEXT://10.152.183.203:9092
+              value: PLAINTEXT://10.152.183.148:9092
             - name: KAFKA_CFG_LISTENERS
               value: PLAINTEXT://:9092
 
