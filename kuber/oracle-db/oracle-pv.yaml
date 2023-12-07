@@ -1,0 +1,21 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: ora-data-volume
+  namespace: oracle-namespace
+  labels:
+    type: local
+spec:
+  claimRef:
+    kind: PersistentVolumeClaim
+    namespace: oracle-namespace
+    name: oracle-rdbms-oradata
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 40Gi
+  storageClassName: microk8s-hostpath
+  persistentVolumeReclaimPolicy: Retain
+  volumeMode: Filesystem
+  hostPath:
+    path: /home/thaimore/kuber-images

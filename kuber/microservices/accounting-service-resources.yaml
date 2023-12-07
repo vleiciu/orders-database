@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: accounting-service-dp
+  namespace: orders
+  labels:
+    name: accounting-service-dp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: accounting-service-dp
+  template:
+    metadata:
+      labels:
+        app: accounting-service-dp
+    spec:
+      containers:
+        - name: accounting-image
+          image: thaimore/accounting-service:latest
+          env:
+            - name: JAR_FILE
+              value: AccountingService-0.0.1-SNAPSHOT.jar
+            - name: LOCATION
+              value: deploy.properties
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8082
+      imagePullSecrets:
+        - name: dockerhub
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: accounting-service-s
+  namespace: orders
+spec:
+  selector:
+    app: accounting-service-dp
+  ports:
+    - protocol: TCP
+      port: 8082
+      targetPort: 8082

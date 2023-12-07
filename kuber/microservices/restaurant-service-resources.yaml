@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: restaurant-service-dp
+  namespace: orders
+  labels:
+    name: restaurant-service-dp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: restaurant-service-dp
+  template:
+    metadata:
+      labels:
+        app: restaurant-service-dp
+    spec:
+      containers:
+        - name: restaurant-image
+          image: thaimore/restaurant-service:latest
+          env:
+            - name: JAR_FILE
+              value: RestaurantService-0.0.1-SNAPSHOT.jar
+            - name: LOCATION
+              value: deploy.properties
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8083
+      imagePullSecrets:
+        - name: dockerhub
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: restaurant-service-s
+  namespace: orders
+spec:
+  selector:
+    app: restaurant-service-dp
+  ports:
+    - protocol: TCP
+      port: 8083
+      targetPort: 8083

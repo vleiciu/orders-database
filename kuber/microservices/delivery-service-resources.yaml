@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: delivery-service-dp
+  namespace: orders
+  labels:
+    name: delivery-service-dp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: delivery-service-dp
+  template:
+    metadata:
+      labels:
+        app: delivery-service-dp
+    spec:
+      containers:
+        - name: delivery-image
+          image: thaimore/delivery-service:latest
+          env:
+            - name: JAR_FILE
+              value: DeliveryService-0.0.1-SNAPSHOT.jar
+            - name: LOCATION
+              value: deploy.properties
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8084
+      imagePullSecrets:
+        - name: dockerhub
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: delivery-service-s
+  namespace: orders
+spec:
+  selector:
+    app: delivery-service-dp
+  ports:
+    - protocol: TCP
+      port: 8084
+      targetPort: 8084

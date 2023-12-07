@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-service-dp
+  namespace: orders
+  labels:
+    name: order-service-dp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: order-service-dp
+  template:
+    metadata:
+      labels:
+        app: order-service-dp
+    spec:
+      containers:
+        - name: orders-image
+          image: thaimore/order-service:latest
+          env:
+            - name: JAR_FILE
+              value: OrderService-0.0.1-SNAPSHOT.jar
+            - name: LOCATION
+              value: deploy.properties
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8081
+      imagePullSecrets:
+        - name: dockerhub
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: order-service-s
+  namespace: orders
+spec:
+  selector:
+    app: order-service-dp
+  ports:
+    - protocol: TCP
+      port: 8081
+      targetPort: 8081

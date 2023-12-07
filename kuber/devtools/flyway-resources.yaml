@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: flyway
+spec:
+  template:
+    metadata:
+      name: flyway
+    spec:
+      containers:
+        - name: flyway
+          image: thaimore/orders-flyway:latest
+          command: ["flyway", "migrate"]
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Never
+      imagePullSecrets:
+        - name: dockerhub
